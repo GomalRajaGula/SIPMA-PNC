@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id" class="bg-gray-50 antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengajuan Poin - SIPMA PNC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body class="flex h-screen overflow-hidden text-gray-800">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col shrink-0">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold text-lg mr-3">S</div>
+            <span class="font-bold text-lg text-gray-900 tracking-tight">SIPMA <span class="text-blue-600">PNC</span></span>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition">
+                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                Dashboard
+            </a>
+            <a href="pengajuan.html" class="flex items-center px-3 py-2.5 bg-blue-50 text-blue-700 rounded-lg font-medium text-sm">
+                <svg class="w-5 h-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Pengajuan Poin
+            </a>
+            <a href="chatbot.html" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition">
+                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                Chatbot AI
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-200">
+            <a href="login.html" class="flex items-center w-full px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg font-medium text-sm transition">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Keluar
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto">
+        <!-- Header -->
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0">
+            <h1 class="text-xl font-bold text-gray-800">Form Pengajuan Poin</h1>
+            <div class="flex items-center space-x-3 border-l border-gray-200 pl-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-semibold text-gray-900 leading-tight">Achmal Maulana</p>
+                    <p class="text-xs text-gray-500">TRPL 2-B • 250215033</p>
+                </div>
+                <div class="w-9 h-9 bg-gray-200 rounded-full overflow-hidden border border-gray-300">
+                    <img src="https://ui-avatars.com/api/?name=Achmal+Maulana&background=0D8ABC&color=fff" alt="Avatar" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="p-6 max-w-5xl mx-auto w-full space-y-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left Column: Form Pengajuan -->
+                <div class="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <h2 class="text-lg font-bold text-gray-900 mb-1">Unggah Sertifikat / Bukti Kegiatan</h2>
+                    <p class="text-xs text-gray-500 mb-6">Isi data sertifikat dengan benar agar proses verifikasi BAAK berjalan cepat.</p>
+
+                    <form action="dashboard.html" method="POST" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Kegiatan / Prestasi</label>
+                            <input type="text" placeholder="Contoh: Juara 1 Web Design ITECHNO CUP 2026" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-gray-50 focus:bg-white transition" required>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Kategori Kegiatan</label>
+                                <select class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-gray-50 focus:bg-white transition" required>
+                                    <option value="">Pilih Kategori</option>
+                                    <option value="1">Prestasi Lomba / Kompetisi</option>
+                                    <option value="2">Kepengurusan Organisasi / Panitia</option>
+                                    <option value="3">Seminar / Workshop / Pelatihan</option>
+                                    <option value="4">Kegiatan Wajib Kampus (PKKMB/ORPEL)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Tingkat / Level</label>
+                                <select class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-gray-50 focus:bg-white transition" required>
+                                    <option value="">Pilih Tingkat</option>
+                                    <option value="nasional">Nasional</option>
+                                    <option value="provinsi">Provinsi</option>
+                                    <option value="lokal">Internal / Kampus PNC</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Peran Dalam Kegiatan</label>
+                                <input type="text" placeholder="Contoh: Ketua / Peserta / Anggota" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-gray-50 focus:bg-white transition" required>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Pelaksanaan</label>
+                                <input type="date" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-gray-50 focus:bg-white transition" required>
+                            </div>
+                        </div>
+
+                        <!-- Drag and Drop Area -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">File Sertifikat (PDF / JPG / PNG)</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center hover:bg-blue-50/50 hover:border-blue-400 transition cursor-pointer group">
+                                <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto text-blue-600 mb-2 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                </div>
+                                <p class="text-sm font-semibold text-gray-700">Tarik & lepas sertifikat di sini, atau <span class="text-blue-600 underline">pilih file</span></p>
+                                <p class="text-xs text-gray-400 mt-1">Ukuran file maksimal: 2 MB (PDF, PNG, JPG)</p>
+                                <input type="file" class="hidden" accept=".pdf,.png,.jpg,.jpeg">
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex items-center justify-end space-x-3">
+                            <a href="dashboard.html" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition">Batal</a>
+                            <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition shadow-md shadow-blue-600/30">Kirim Pengajuan</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Column: Panduan & Tips -->
+                <div class="space-y-6">
+                    <!-- Card Ketentuan -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <h3 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Panduan Validasi
+                        </h3>
+                        <ul class="space-y-2.5 text-xs text-gray-600 leading-relaxed">
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-600 font-bold">•</span>
+                                Pastikan nama mahasiswa tertera jelas pada sertifikat.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-600 font-bold">•</span>
+                                Berkas tidak boleh buram atau terpotong (*crop*).
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-600 font-bold">•</span>
+                                Pengajuan diproses BAAK maksimal 3x24 jam kerja.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-600 font-bold">•</span>
+                                Jika terjadi penolakan, cek alasan pada tabel dasbor lalu lakukan pengajuan ulang.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Card Bantuan AI -->
+                    <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-md">
+                        <h3 class="font-bold text-base mb-1">Bingung Hitungan Poin?</h3>
+                        <p class="text-xs text-blue-100 mb-4 leading-relaxed">Tanyakan langsung pada Asisten AI SIPMA untuk estimasi bobot poin kegiatanmu.</p>
+                        <a href="chatbot.html" class="inline-flex items-center text-xs font-semibold bg-white text-blue-700 px-4 py-2 rounded-xl hover:bg-blue-50 transition">
+                            Tanya Chatbot AI
+                            <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
