@@ -277,13 +277,39 @@
         </div>
     </div>
 
-    <!-- Script untuk Buka/Tutup Modal -->
-    <script>
-        function toggleModal() {
-            const modal = document.getElementById('modalPengajuan');
-            modal.classList.toggle('hidden');
-        }
-    </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Cari tombol spesifik berdasarkan teksnya (Pengajuan Baru) atau berikan ID
+    const allButtons = document.querySelectorAll('button, a');
+    let btnPengajuanBaru = null;
 
+    allButtons.forEach(btn => {
+        if (btn.textContent.includes('Pengajuan Baru')) {
+            btnPengajuanBaru = btn;
+        }
+    });
+
+    if (btnPengajuanBaru) {
+        btnPengajuanBaru.addEventListener('click', (e) => {
+            e.preventDefault(); // Cegah behavior bawaan jika tombol berupa tag <a> atau form submit
+            window.location.href = 'pengajuan.html';
+        });
+    }
+
+    // 2. Event Delegation untuk tabel
+    const riwayatTable = document.querySelector('table');
+    if (riwayatTable) {
+        riwayatTable.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON' || e.target.classList.contains('btn-aksi')) {
+                const row = e.target.closest('tr');
+                if (row && confirm('Apakah Anda ingin menghapus atau membatalkan riwayat pengajuan ini?')) {
+                    row.remove();
+                    alert('Data riwayat berhasil dihapus dari sistem.');
+                }
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
