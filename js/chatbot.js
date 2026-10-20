@@ -6,6 +6,38 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  // ==========================================================
+  // AUTH GUARD — Allow All Roles (Mahasiswa, Dosen, BAAK)
+  // ==========================================================
+
+  if (!SIPMAAuth.isLoggedIn()) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  var user = SIPMAAuth.getCurrentUser();
+
+  // Logout Button Handler
+  var btnLogout = document.getElementById('btnLogout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (confirm('Apakah Anda yakin ingin keluar?')) {
+        SIPMAAuth.logout();
+      }
+    });
+  }
+
+  // Update greeting message with user name
+  var greetingDiv = document.querySelector('#messageArea .bg-white p');
+  if (greetingDiv && user && user.name) {
+    greetingDiv.innerHTML = 'Halo <strong>' + user.name + '</strong>! Aku asisten virtual SIPMA PNC. Kamu bisa tanya apa aja seputar aturan poin, syarat minimum yudisium, atau cara mengajukan sertifikat kegiatan.';
+  }
+
+  // ==========================================================
+  // CHATBOT LOGIC
+  // ==========================================================
+
   var chatInput      = document.getElementById('chatInput');
   var btnSend        = document.getElementById('btnSend');
   var messageArea    = document.getElementById('messageArea');

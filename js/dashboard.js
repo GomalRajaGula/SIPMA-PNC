@@ -7,6 +7,31 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   // ==========================================================
+  // AUTH GUARD — Require Mahasiswa Role
+  // ==========================================================
+
+  SIPMAAuth.requireAuth([SIPMAAuth.ROLES.MAHASISWA]);
+
+  var user = SIPMAAuth.getCurrentUser();
+  if (user && user.name) {
+    var userNameEl = document.querySelector('header p.text-sm.font-semibold');
+    if (userNameEl) userNameEl.textContent = user.name;
+    var userKelasEl = document.querySelector('header p.text-xs.text-gray-500');
+    if (userKelasEl) userKelasEl.textContent = (user.kelas || '') + ' • ' + user.username;
+  }
+
+  // Logout Button Handler
+  var btnLogout = document.getElementById('btnLogout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (confirm('Apakah Anda yakin ingin keluar?')) {
+        SIPMAAuth.logout();
+      }
+    });
+  }
+
+  // ==========================================================
   // PRAKTIKUM 1 & 2 — DOM Selection & Dynamic Styling
   // ==========================================================
 
