@@ -45,20 +45,18 @@
         <!-- Header -->
         <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0">
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold">
-                    🤖
-                </div>
+                <div class="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-sm">AI</div>
                 <div>
                     <h1 class="text-base font-bold text-gray-900 leading-tight">Asisten AI SIPMA</h1>
                     <p class="text-xs text-green-600 flex items-center gap-1 font-medium">
-                        <span class="w-2 h-2 bg-green-500 rounded-full"></span> Online • Siap Membantu
+                        <span class="w-2 h-2 bg-green-500 rounded-full"></span> Online
                     </p>
                 </div>
             </div>
         </header>
 
         <!-- Message Area -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-4 max-w-4xl mx-auto w-full">
+        <div id="messageArea" class="flex-1 overflow-y-auto p-6 space-y-4 max-w-4xl mx-auto w-full">
             
             <!-- Bot Bubble Greeting -->
             <div class="flex items-start gap-3">
@@ -72,35 +70,10 @@
             </div>
 
             <!-- Quick Suggestions -->
-            <div class="flex flex-wrap gap-2 pl-11">
+            <div id="suggestionsBox" class="flex flex-wrap gap-2 pl-11">
                 <button class="text-xs bg-white border border-blue-200 text-blue-600 px-3 py-1.5 rounded-full hover:bg-blue-50 transition">Berapa poin syarat yudisium D4?</button>
                 <button class="text-xs bg-white border border-blue-200 text-blue-600 px-3 py-1.5 rounded-full hover:bg-blue-50 transition">Berapa poin untuk juara lomba nasional?</button>
                 <button class="text-xs bg-white border border-blue-200 text-blue-600 px-3 py-1.5 rounded-full hover:bg-blue-50 transition">Sertifikat apa aja yang wajib?</button>
-            </div>
-
-            <!-- User Bubble Example -->
-            <div class="flex items-start gap-3 justify-end">
-                <div class="bg-blue-600 text-white p-4 rounded-2xl rounded-tr-none shadow-sm max-w-lg">
-                    <p class="text-sm leading-relaxed">Berapa poin minimal yang harus dikumpulkan untuk mahasiswa D4 TRPL?</p>
-                    <span class="text-[10px] text-blue-200 mt-2 block text-right">10:01 AM</span>
-                </div>
-                <div class="w-8 h-8 rounded-lg bg-gray-300 overflow-hidden shrink-0">
-                    <img src="https://ui-avatars.com/api/?name=Achmal+Maulana&background=0D8ABC&color=fff" alt="User Avatar" class="w-full h-full object-cover">
-                </div>
-            </div>
-
-            <!-- Bot Response Example -->
-            <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold shrink-0 text-sm">AI</div>
-                <div class="bg-white border border-gray-200 p-4 rounded-2xl rounded-tl-none shadow-sm max-w-lg">
-                    <p class="text-sm text-gray-800 leading-relaxed">
-                        Untuk jenjang <strong>D4 (Sarjana Terapan)</strong> di Politeknik Negeri Cilacap, batas minimal kumulatif poin keaktifan adalah <strong>36 Poin</strong>.
-                    </p>
-                    <p class="text-sm text-gray-800 leading-relaxed mt-2">
-                        Pastikan juga kamu menyertakan kegiatan wajib seperti <strong>PKKMB</strong> karena sertifikat tersebut bersifat mandatori untuk syarat pendaftaran yudisium!
-                    </p>
-                    <span class="text-[10px] text-gray-400 mt-2 block">10:01 AM</span>
-                </div>
             </div>
 
         </div>
@@ -108,13 +81,15 @@
         <!-- Chat Input Footer -->
         <div class="p-4 bg-white border-t border-gray-200 shrink-0">
             <div class="max-w-4xl mx-auto flex items-center gap-2">
-                <input type="text" placeholder="Ketik pertanyaanmu di sini..." class="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-sm transition">
-                <button class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl transition shadow-md shadow-blue-600/30 flex items-center justify-center">
+                <input id="chatInput" type="text" placeholder="Ketik pertanyaanmu di sini..." class="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-sm transition">
+                <button id="btnSend" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl transition shadow-md shadow-blue-600/30 flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9-7-9-7-9 7 9 7zm0 0v-8"/></svg>
                 </button>
             </div>
         </div>
     </main>
+
+    <script src="js/chatbot.js"></script>
 
 </body>
 </html>

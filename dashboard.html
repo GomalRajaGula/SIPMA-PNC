@@ -6,7 +6,10 @@
     <title>Dashboard Mahasiswa - SIPMA PNC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style> body { font-family: 'Inter', sans-serif; } </style>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .progress-bar { transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
 </head>
 <body class="flex h-screen overflow-hidden text-gray-800">
 
@@ -33,10 +36,10 @@
         </nav>
 
         <div class="p-4 border-t border-gray-200">
-            <button class="flex items-center w-full px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg font-medium text-sm transition">
+            <a href="login.html" class="flex items-center w-full px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg font-medium text-sm transition">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                 Keluar
-            </button>
+            </a>
         </div>
     </aside>
 
@@ -66,11 +69,11 @@
         <div class="p-6 max-w-6xl mx-auto w-full space-y-6">
             
             <!-- EWS Alert (Early Warning System) -->
-            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg flex items-start shadow-sm">
+            <div id="ewsAlert" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg flex items-start shadow-sm">
                 <svg class="w-5 h-5 text-amber-600 mt-0.5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                 <div>
                     <h3 class="text-sm font-bold text-amber-800">Peringatan Sistem EWS</h3>
-                    <p class="text-sm text-amber-700 mt-1">Anda Masih Kekurangan <span class="font-bold">POIN !!</span> Poin harus dipenuhi sebagai syarat pendaftaran yudisium.</p>
+                    <p id="ewsMessage" class="text-sm text-amber-700 mt-1">Anda Masih Kekurangan <span class="font-bold">POIN !!</span> Poin harus dipenuhi sebagai syarat pendaftaran yudisium.</p>
                 </div>
             </div>
 
@@ -81,7 +84,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-gray-500 mb-1">Total Poin Disetujui</p>
-                            <h2 class="text-4xl font-extrabold text-gray-900">26</h2>
+                            <h2 id="totalApproved" class="text-4xl font-extrabold text-gray-900">0</h2>
                         </div>
                         <div class="p-2 bg-green-50 rounded-lg text-green-600">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -94,7 +97,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-gray-500 mb-1">Poin Menunggu Validasi</p>
-                            <h2 class="text-4xl font-extrabold text-blue-600">7</h2>
+                            <h2 id="totalPending" class="text-4xl font-extrabold text-blue-600">0</h2>
                         </div>
                         <div class="p-2 bg-blue-50 rounded-lg text-blue-600">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -106,10 +109,10 @@
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
                     <p class="text-sm font-medium text-gray-500 mb-2">Progres Syarat D4 (Min. 36 Poin)</p>
                     <div class="flex items-end gap-2 mb-2">
-                        <span class="text-3xl font-extrabold text-gray-900">72%</span>
+                        <span id="progressText" class="text-3xl font-extrabold text-gray-900">0%</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 72%"></div>
+                        <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
@@ -118,14 +121,13 @@
             <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
                 <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
                     <h2 class="text-lg font-bold text-gray-900">Riwayat Pengajuan Terakhir</h2>
-                    <button onclick="toggleModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition flex items-center">
+                    <a id="btnPengajuanBaru" href="pengajuan.html" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     Pengajuan Baru
-                    </button>
-                    
+                    </a>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-600">
+                    <table id="tabelRiwayat" class="w-full text-left text-sm text-gray-600">
                         <thead class="bg-gray-50 text-gray-500 font-medium">
                             <tr>
                                 <th class="px-6 py-4">Nama Kegiatan</th>
@@ -133,85 +135,93 @@
                                 <th class="px-6 py-4">Tanggal Pengajuan</th>
                                 <th class="px-6 py-4 text-center">Estimasi Poin</th>
                                 <th class="px-6 py-4 text-center">Status</th>
+                                <th class="px-6 py-4 text-center">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr class="hover:bg-gray-50 transition">
+                        <tbody id="tbodyRiwayat" class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50 transition" data-status="menunggu">
                                 <td class="px-6 py-4 font-medium text-gray-900">Juara 1 Lomba Web Design KMIPN VIII</td>
                                 <td class="px-6 py-4">Prestasi Nasional</td>
                                 <td class="px-6 py-4">25 Sep 2026</td>
                                 <td class="px-6 py-4 text-center font-semibold text-gray-700">7</td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
-                                        Menunggu
-                                    </span>
+                                    <span class="status-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium">Menunggu</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <button data-action="delete" class="text-red-400 hover:text-red-600 transition text-xs font-semibold">Hapus</button>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-gray-50 transition">
+                            <tr class="hover:bg-gray-50 transition" data-status="disetujui">
                                 <td class="px-6 py-4 font-medium text-gray-900">Panitia Divisi Perlengkapan Dies Natalis TRPL</td>
                                 <td class="px-6 py-4">Organisasi Lokal</td>
                                 <td class="px-6 py-4">10 Sep 2026</td>
                                 <td class="px-6 py-4 text-center font-semibold text-gray-700">1</td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                        Disetujui
-                                    </span>
+                                    <span class="status-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium">Disetujui</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-gray-300 text-xs">—</span>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 font-medium text-gray-900">Pengenalan Kehidupan Kampus bagi Mahasiswa (PKKMB) </td>
+                            <tr class="hover:bg-gray-50 transition" data-status="disetujui">
+                                <td class="px-6 py-4 font-medium text-gray-900">Pengenalan Kehidupan Kampus bagi Mahasiswa (PKKMB)</td>
                                 <td class="px-6 py-4">Internal / Kampus</td>
                                 <td class="px-6 py-4">05 Sep 2026</td>
                                 <td class="px-6 py-4 text-center font-semibold text-gray-700">8</td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                        Disetujui
-                                    </span>
+                                    <span class="status-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium">Disetujui</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-gray-300 text-xs">—</span>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-gray-50 transition">
+                            <tr class="hover:bg-gray-50 transition" data-status="disetujui">
                                 <td class="px-6 py-4 font-medium text-gray-900">Latihan Keterampilan Manajemen Mahasiswa (LKMM)</td>
                                 <td class="px-6 py-4">Organisasi Internal</td>
                                 <td class="px-6 py-4">20 Agu 2026</td>
                                 <td class="px-6 py-4 text-center font-semibold text-gray-700">8</td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                        Disetujui
-                                    </span>
+                                    <span class="status-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium">Disetujui</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-gray-300 text-xs">—</span>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 font-medium text-gray-900">Latihan Dasar Disiplin & Kepemimpinan (LDDK) </td>
+                            <tr class="hover:bg-gray-50 transition" data-status="disetujui">
+                                <td class="px-6 py-4 font-medium text-gray-900">Latihan Dasar Disiplin &amp; Kepemimpinan (LDDK)</td>
                                 <td class="px-6 py-4">Internal / Kampus</td>
                                 <td class="px-6 py-4">15 Agu 2026</td>
                                 <td class="px-6 py-4 text-center font-semibold text-gray-700">8</td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                        Disetujui
-                                    </span>
+                                    <span class="status-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium">Disetujui</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-gray-300 text-xs">—</span>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-gray-50 transition">
+                            <tr class="hover:bg-gray-50 transition" data-status="disetujui">
                                 <td class="px-6 py-4 font-medium text-gray-900">Peserta Seminar Cyber Security</td>
                                 <td class="px-6 py-4">Seminar Internal</td>
                                 <td class="px-6 py-4">12 Agu 2026</td>
                                 <td class="px-6 py-4 text-center font-semibold text-gray-700">1</td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                        Disetujui
-                                    </span>
+                                    <span class="status-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium">Disetujui</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-gray-300 text-xs">—</span>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-gray-50 transition">
+                            <tr class="hover:bg-gray-50 transition" data-status="ditolak">
                                 <td class="px-6 py-4 font-medium text-gray-900">Sertifikat TOEFL ITP 450</td>
                                 <td class="px-6 py-4">Kemampuan Bahasa</td>
                                 <td class="px-6 py-4">01 Agu 2026</td>
                                 <td class="px-6 py-4 text-center font-semibold text-gray-700">-</td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                                        Ditolak
-                                    </span>
+                                    <span class="status-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium">Ditolak</span>
                                     <p class="text-[10px] text-red-500 mt-1">Sertifikat blur</p>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <button data-action="delete" class="text-red-400 hover:text-red-600 transition text-xs font-semibold">Hapus</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -222,94 +232,10 @@
         </div>
     </main>
 
-    <!-- MODAL FORM PENGAJUAN POIN -->
-    <div id="modalPengajuan" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transform transition-all">
-            <!-- Modal Header -->
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="font-bold text-gray-900">Form Pengajuan Poin Baru</h3>
-                <button onclick="toggleModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-6 right-6 z-50 space-y-3"></div>
 
-            <!-- Modal Body -->
-            <form class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Kegiatan / Prestasi</label>
-                    <input type="text" placeholder="Contoh: Juara 1 KMIPN VIII" class="w-full px-3.5 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm" required>
-                </div>
+    <script src="js/dashboard.js"></script>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Kategori</label>
-                        <select class="w-full px-3.5 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm" required>
-                            <option value="">Pilih Kategori</option>
-                            <option value="prestasi">Prestasi Lomba</option>
-                            <option value="organisasi">Kepengurusan Organisasi</option>
-                            <option value="seminar">Seminar / Workshop</option>
-                            <option value="wajib">Kegiatan Wajib Kampus</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Pelaksanaan</label>
-                        <input type="date" class="w-full px-3.5 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm" required>
-                    </div>
-                </div>
-
-                <!-- Upload File Drag & Drop -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Upload Sertifikat (PDF/JPG/PNG)</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-50 transition cursor-pointer">
-                        <svg class="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                        <p class="text-xs text-gray-600 font-medium">Klik untuk upload atau drag file ke sini</p>
-                        <p class="text-[10px] text-gray-400 mt-0.5">Maksimal ukuran file: 2 MB</p>
-                        <input type="file" class="hidden" accept=".pdf,.png,.jpg,.jpeg">
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="pt-4 flex justify-end space-x-3 border-t border-gray-100">
-                    <button type="button" onclick="toggleModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-sm transition">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition shadow-md shadow-blue-600/20">Kirim Pengajuan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Cari tombol spesifik berdasarkan teksnya (Pengajuan Baru) atau berikan ID
-    const allButtons = document.querySelectorAll('button, a');
-    let btnPengajuanBaru = null;
-
-    allButtons.forEach(btn => {
-        if (btn.textContent.includes('Pengajuan Baru')) {
-            btnPengajuanBaru = btn;
-        }
-    });
-
-    if (btnPengajuanBaru) {
-        btnPengajuanBaru.addEventListener('click', (e) => {
-            e.preventDefault(); // Cegah behavior bawaan jika tombol berupa tag <a> atau form submit
-            window.location.href = 'pengajuan.html';
-        });
-    }
-
-    // 2. Event Delegation untuk tabel
-    const riwayatTable = document.querySelector('table');
-    if (riwayatTable) {
-        riwayatTable.addEventListener('click', function(e) {
-            if (e.target.tagName === 'BUTTON' || e.target.classList.contains('btn-aksi')) {
-                const row = e.target.closest('tr');
-                if (row && confirm('Apakah Anda ingin menghapus atau membatalkan riwayat pengajuan ini?')) {
-                    row.remove();
-                    alert('Data riwayat berhasil dihapus dari sistem.');
-                }
-            }
-        });
-    }
-});
-</script>
 </body>
 </html>
