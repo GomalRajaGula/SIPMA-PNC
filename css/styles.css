@@ -1,3 +1,45 @@
 /* SIPMA PNC - Custom Styles */
-/* Tailwind CSS via CDN handles primary styling. */
-/* Add custom overrides or animations here as needed. */
+/* Tailwind CSS via CDN menangani styling utama.
+   File ini berisi styling tambahan + aturan cetak (print). */
+
+/* Toast container animasi masuk dari kanan */
+#toastContainer > div {
+  will-change: transform, opacity;
+}
+
+/* Progress bar dashboard (animasi fill) */
+.progress-bar {
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================
+   PRINT — dipakai saat halaman dicetak langsung (Ctrl+P).
+   Tombol "Cetak Rekapitulasi PDF" (Dosen Wali) memakai jendela
+   cetak terpisah dengan stylesheet-nya sendiri.
+   ========================================================== */
+@media print {
+  aside,
+  header,
+  #toastContainer,
+  button,
+  select,
+  input,
+  .no-print {
+    display: none !important;
+  }
+
+  body,
+  main {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  table {
+    font-size: 11px;
+  }
+}

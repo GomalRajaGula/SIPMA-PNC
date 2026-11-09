@@ -1,48 +1,47 @@
 // ============================================================
-// js/chatbot.js — SIPMA PNC
-// Praktikum 3 & 6: Event Handling, Dynamic Node Creation,
-//   Event Delegation pada Quick Suggestion Buttons
+// js/chatbot.js — SIPMA PNC Asisten AI (FAQ statis)
+// Semua role bisa akses; sidebar mengikuti role aktif.
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function () {
 
   // ==========================================================
-  // AUTH GUARD — Allow All Roles (Mahasiswa, Dosen, BAAK)
+  // AUTH GUARD — Semua Role
   // ==========================================================
+  if (!SIPMAAuth.requireAuth([
+    SIPMAAuth.ROLES.MAHASISWA,
+    SIPMAAuth.ROLES.DOSEN,
+    SIPMAAuth.ROLES.BAAK
+  ])) return;
 
-  if (!SIPMAAuth.isLoggedIn()) {
-    window.location.href = 'login.html';
-    return;
-  }
+  SIPMAAuth.renderSidebar('chatbot.html');
 
   var user = SIPMAAuth.getCurrentUser();
 
-  // Logout Button Handler
   var btnLogout = document.getElementById('btnLogout');
   if (btnLogout) {
     btnLogout.addEventListener('click', function (e) {
       e.preventDefault();
-      if (confirm('Apakah Anda yakin ingin keluar?')) {
-        SIPMAAuth.logout();
-      }
+      if (confirm('Apakah Anda yakin ingin keluar?')) SIPMAAuth.logout();
     });
   }
 
-  // Update greeting message with user name
+  // Sapaan + avatar sesuai user yang login
   var greetingDiv = document.querySelector('#messageArea .bg-white p');
   if (greetingDiv && user && user.name) {
     greetingDiv.innerHTML = 'Halo <strong>' + user.name + '</strong>! Aku asisten virtual SIPMA PNC. Kamu bisa tanya apa aja seputar aturan poin, syarat minimum yudisium, atau cara mengajukan sertifikat kegiatan.';
   }
 
-  // ==========================================================
-  // CHATBOT LOGIC
-  // ==========================================================
+  var avatarName = (user && user.name) ? user.name.split(' ').join('+') : 'Pengguna';
 
   var chatInput      = document.getElementById('chatInput');
   var btnSend        = document.getElementById('btnSend');
   var messageArea    = document.getElementById('messageArea');
   var suggestionsBox = document.getElementById('suggestionsBox');
 
+  // ==========================================================
+  // Basis pengetahuan FAQ
+  // ==========================================================
   var FAQ = {
     'berapa poin syarat yudisium d4':
       'Untuk jenjang <strong>D4 (Sarjana Terapan)</strong> di PNC, batas minimal kumulatif poin keaktifan adalah <strong>36 Poin</strong>.',
@@ -53,7 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
     'cara mengajukan sertifikat':
       'Buka menu <strong>Pengajuan Poin</strong> di sidebar, lalu isi form dengan nama kegiatan, kategori, tingkat, peran, tanggal, dan unggah file sertifikat (PDF/JPG/PNG maks 2 MB).',
     'berapa lama proses verifikasi':
-      'Proses verifikasi oleh BAAK memakan waktu maksimal <strong>3x24 jam kerja</strong>. Status dapat dipantau di halaman Dashboard.'
+      'Proses verifikasi oleh BAAK memakan waktu maksimal <strong>3x24 jam kerja</strong>. Status dapat dipantau di halaman Dashboard.',
+    'katalog poin':
+      'Tabel lengkap bobot poin per kategori & tingkat (termasuk versi aturan per angkatan) bisa dilihat di halaman <strong>Katalog Poin</strong> pada sidebar.'
   };
 
   function getTimestamp() {
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         + '<span class="text-[10px] text-blue-200 mt-2 block text-right">' + getTimestamp() + '</span>'
       + '</div>'
       + '<div class="w-8 h-8 rounded-lg bg-gray-300 overflow-hidden shrink-0">'
-        + '<img src="https://ui-avatars.com/api/?name=Achmal+Maulana&background=0D8ABC&color=fff" alt="User Avatar" class="w-full h-full object-cover">'
+        + '<img src="https://ui-avatars.com/api/?name=' + avatarName + '&background=0D8ABC&color=fff" alt="User Avatar" class="w-full h-full object-cover">'
       + '</div>';
     return wrapper;
   }
@@ -118,7 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var keywords = {
-      'poin':       'Untuk informasi detail poin, silakan cek halaman <strong>Dashboard</strong> atau tanyakan pertanyaan yang lebih spesifik, misalnya: "Berapa poin syarat yudisium D4?"',
+      'poin':       'Untuk informasi detail poin, silakan cek halaman <strong>Dashboard</strong> atau <strong>Katalog Poin</strong> di sidebar, atau tanyakan pertanyaan yang lebih spesifik, misalnya: "Berapa poin syarat yudisium D4?"',
+      'katalog':    'Tabel lengkap bobot poin per kategori & tingkat ada di halaman <strong>Katalog Poin</strong> pada sidebar.',
       'sertifikat': 'Sertifikat yang diunggah harus dalam format <strong>PDF, JPG, atau PNG</strong> dengan ukuran maksimal <strong>2 MB</strong>. Pastikan nama mahasiswa tertera jelas.',
       'yudisium':   'Syarat yudisium D4 di PNC memerlukan minimal <strong>36 Poin</strong> keaktifan, termasuk kegiatan wajib PKKMB, LDDK, dan LKMM.',
       'organisasi': 'Kepengurusan organisasi/panitia memberikan poin: <strong>Nasional 5</strong>, <strong>Provinsi 3</strong>, <strong>Internal 1 Poin</strong>.',

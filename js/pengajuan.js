@@ -1,40 +1,35 @@
 // ============================================================
-// js/pengajuan.js — SIPMA PNC
-// Praktikum 1-6: DOM Selection, Dynamic Styling, Event Handling,
-//   Form Validation, Smart Input Wizard, Timers, Drag & Drop
+// js/pengajuan.js — SIPMA PNC Form Pengajuan Poin (Mahasiswa)
+// Estimasi poin dari SIPMAData (rule versioning), submit tersimpan
+// ke localStorage sehingga tampil di dashboard & antrean BAAK.
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function () {
 
   // ==========================================================
-  // AUTH GUARD — Require Mahasiswa Role
+  // AUTH GUARD — Hanya Mahasiswa
   // ==========================================================
-
-  SIPMAAuth.requireAuth([SIPMAAuth.ROLES.MAHASISWA]);
+  if (!SIPMAAuth.requireAuth([SIPMAAuth.ROLES.MAHASISWA])) return;
+  SIPMAAuth.renderSidebar('pengajuan.html');
 
   var user = SIPMAAuth.getCurrentUser();
-  if (user && user.name) {
-    var userNameEl = document.querySelector('header p.text-sm.font-semibold');
-    if (userNameEl) userNameEl.textContent = user.name;
-    var userKelasEl = document.querySelector('header p.text-xs.text-gray-500');
-    if (userKelasEl) userKelasEl.textContent = (user.kelas || '') + ' • ' + user.username;
-  }
 
-  // Logout Button Handler
+  var userNameEl = document.querySelector('header p.text-sm.font-semibold');
+  if (userNameEl) userNameEl.textContent = user.name;
+  var userKelasEl = document.querySelector('header p.text-xs.text-gray-500');
+  if (userKelasEl) userKelasEl.textContent = (user.kelas || '') + ' • ' + user.username;
+
   var btnLogout = document.getElementById('btnLogout');
   if (btnLogout) {
     btnLogout.addEventListener('click', function (e) {
       e.preventDefault();
-      if (confirm('Apakah Anda yakin ingin keluar?')) {
-        SIPMAAuth.logout();
-      }
+      if (confirm('Apakah Anda yakin ingin keluar?')) SIPMAAuth.logout();
     });
   }
 
   // ==========================================================
-  // PRAKTIKUM 1 & 2 — DOM Selection via getElementById
+  // Elemen DOM
   // ==========================================================
-
   var form            = document.getElementById('formPengajuan');
   var namaInput       = document.getElementById('namaKegiatan');
   var kategoriSelect  = document.getElementById('kategoriKegiatan');
@@ -45,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var dropZone        = document.getElementById('dropZone');
   var dropZoneText    = document.getElementById('dropZoneText');
   var estimasiEl      = document.getElementById('estimasiPoin');
-  var toastContainer  = document.getElementById('toastContainer');
 
   var errorNama     = document.getElementById('errorNama');
   var errorKategori = document.getElementById('errorKategori');
@@ -54,50 +48,46 @@ document.addEventListener('DOMContentLoaded', function () {
   var errorTanggal  = document.getElementById('errorTanggal');
   var errorFile     = document.getElementById('errorFile');
 
-  // ==========================================================
-  // PRAKTIKUM 5 — Smart Input Wizard (Estimasi Poin Real-Time)
-  // ==========================================================
+  var RULES_LABEL = SIPMAData.POIN_RULES[SIPMAData.getAngkatanAktif()].label;
+  var currentFile = null; // { name, type, size, dataUrl }
 
-  var POIN_MAP = {
-    '1': { nasional: 7, provinsi: 5, lokal: 3 },
-    '2': { nasional: 5, provinsi: 3, lokal: 1 },
-    '3': { nasional: 3, provinsi: 2, lokal: 1 },
-    '4': { nasional: 8, provinsi: 8, lokal: 8 }
-  };
-
+  // ==========================================================
+  // Smart Input Wizard — Estimasi poin real-time (rule versioned)
+  // ==========================================================
   function updateEstimasi() {
     if (!estimasiEl || !kategoriSelect || !tingkatSelect) return;
 
     var kat = kategoriSelect.value;
     var tkt = tingkatSelect.value;
 
-    if (kat && tkt && POIN_MAP[kat] && POIN_MAP[kat][tkt] !== undefined) {
-      var poin = POIN_MAP[kat][tkt];
-      estimasiEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>'
-        + 'Estimasi Poin Otomatis: <span class="text-lg ml-1">' + poin + ' Poin</span>';
-      estimasiEl.classList.remove('hidden');
-    } else {
-      estimasiEl.innerHTML = '';
-      estimasiEl.classList.add('hidden');
+    if (kat && tkt) {
+      var poin = SIPMAData.getPoin(kat, tkt);
+      if (poin > 0) {
+        estimasiEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>'
+          + 'Estimasi Poin Otomatis: <span class="text-lg ml-1">' + poin + ' Poin</span>'
+          + '<span class="text-[10px] font-normal text-blue-500 ml-2">Aturan ' + RULES_LABEL + '</span>';
+        estimasiEl.classList.remove('hidden');
+        return;
+      }
     }
+
+    estimasiEl.innerHTML = '';
+    estimasiEl.classList.add('hidden');
   }
 
   if (kategoriSelect) kategoriSelect.addEventListener('change', updateEstimasi);
   if (tingkatSelect)  tingkatSelect.addEventListener('change', updateEstimasi);
 
   // ==========================================================
-  // PRAKTIKUM 3 — Drag & Drop Event Handling
+  // Drag & Drop Upload Sertifikat
   // ==========================================================
-
   if (dropZone && fileInput) {
     dropZone.addEventListener('click', function () {
       fileInput.click();
     });
 
     fileInput.addEventListener('change', function () {
-      if (fileInput.files.length > 0) {
-        handleFile(fileInput.files[0]);
-      }
+      if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
     });
 
     dropZone.addEventListener('dragover', function (e) {
@@ -127,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var maxSize = 2 * 1024 * 1024;
 
     clearError(errorFile);
+    currentFile = null;
 
     if (allowed.indexOf(file.type) === -1) {
       showError(errorFile, 'Format file tidak didukung. Gunakan PDF, PNG, atau JPG.');
@@ -146,12 +137,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     dropZone.classList.add('border-green-400');
     dropZone.classList.remove('border-gray-300');
+
+    // Baca file sebagai Data URL agar bisa disimpan & dipreview BAAK
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      currentFile = { name: file.name, type: file.type, size: file.size, dataUrl: ev.target.result };
+    };
+    reader.readAsDataURL(file);
   }
 
   // ==========================================================
-  // PRAKTIKUM 2 — Dynamic Styling Helper (Error State)
+  // Validasi inline (dynamic styling)
   // ==========================================================
-
   function showError(el, msg) {
     if (!el) return;
     el.textContent = msg;
@@ -181,50 +178,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ==========================================================
-  // PRAKTIKUM 5 — Toast Notification (auto-dismiss 3.5 detik)
+  // Submit — simpan ke SIPMAData (localStorage)
   // ==========================================================
-
-  function showToast(message, type) {
-    if (!toastContainer) return;
-
-    var colors = {
-      success: 'bg-green-500',
-      error:   'bg-red-500',
-      info:    'bg-blue-500'
-    };
-
-    var toast = document.createElement('div');
-    toast.className = (colors[type] || colors.info)
-      + ' text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2 transform translate-x-full opacity-0 transition-all duration-300';
-
-    var icon = '';
-    if (type === 'success') {
-      icon = '<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
-    } else {
-      icon = '<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
-    }
-
-    toast.innerHTML = icon + '<span>' + message + '</span>';
-    toastContainer.appendChild(toast);
-
-    requestAnimationFrame(function () {
-      toast.classList.remove('translate-x-full', 'opacity-0');
-      toast.classList.add('translate-x-0', 'opacity-100');
-    });
-
-    setTimeout(function () {
-      toast.classList.remove('translate-x-0', 'opacity-100');
-      toast.classList.add('translate-x-full', 'opacity-0');
-      setTimeout(function () {
-        if (toast.parentNode) toast.parentNode.removeChild(toast);
-      }, 300);
-    }, 3500);
-  }
-
-  // ==========================================================
-  // PRAKTIKUM 4 — Client-Side Form Validation (Inline Errors)
-  // ==========================================================
-
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -263,22 +218,46 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if (!isValid) {
-        showToast('Mohon lengkapi semua data yang diperlukan.', 'error');
+        SIPMAUI.showToast('Mohon lengkapi semua data yang diperlukan.', 'error');
         return;
       }
 
-      showToast('Pengajuan berhasil dikirim! Menunggu verifikasi BAAK.', 'success');
+      var item = {
+        nim:      user.username,
+        nama:     user.name,
+        kelas:    user.kelas || '',
+        kegiatan: namaInput.value.trim(),
+        kategori: kategoriSelect.value,
+        tingkat:  tingkatSelect.value,
+        peran:    peranInput.value.trim(),
+        tanggal:  tanggalInput.value,
+        poin:     SIPMAData.getPoin(kategoriSelect.value, tingkatSelect.value)
+      };
+
+      if (currentFile) {
+        item.fileName = currentFile.name;
+        item.fileType = currentFile.type;
+        item.fileData = currentFile.dataUrl;
+      }
+
+      var res = SIPMAData.addPengajuan(item);
+
+      // Antisipasi kuota localStorage penuh: simpan ulang tanpa lampiran
+      if (!res.ok && item.fileData) {
+        delete item.fileData;
+        res = SIPMAData.addPengajuan(item);
+        SIPMAUI.showToast('Lampiran terlalu besar untuk penyimpanan lokal — pengajuan tersimpan tanpa lampiran.', 'info');
+      }
+
+      SIPMAUI.showToast('Pengajuan berhasil dikirim! Menunggu verifikasi BAAK.', 'success');
 
       setTimeout(function () {
         window.location.href = 'dashboard.html';
-      }, 2000);
+      }, 1500);
     });
   }
 
-  // ==========================================================
-  // PRAKTIKUM 3 — Clear error on input change (real-time UX)
-  // ==========================================================
-
+  // Clear error saat input berubah (real-time UX)
   if (namaInput)      namaInput.addEventListener('input',  function () { clearError(errorNama); });
   if (kategoriSelect) kategoriSelect.addEventListener('change', function () { clearError(errorKategori); });
   if (tingkatSelect)  tingkatSelect.addEventListener('change',  function () { clearError(errorTingkat); });
